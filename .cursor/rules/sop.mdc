@@ -1,0 +1,559 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Your rule content
+
+# Standard Operating Procedure: Google Maps Pack & Business Profile Analysis
+
+## Purpose
+This SOP outlines the methodology for systematically analyzing Google Maps Pack rankings and Google Business Profiles to track position changes, monitor competitor visibility, identify optimization opportunities, and extract service offerings and update frequency data. The procedure includes comprehensive analysis of the top 20 business profiles for complete competitive intelligence.
+
+## Equipment/Tools Required
+- Firecrawl scraping tool
+- Spreadsheet software (Excel/Google Sheets)
+- SEO analysis software
+- Data visualization tools (for dashboard creation)
+
+## Procedure
+
+### 1. Initial Setup
+   Create a tracking spreadsheet with the following columns:
+   - Date of search
+   - Search query
+   - Location setting
+   - Business name
+   - Position in Maps Pack
+   - URL captured
+   - Screenshot reference
+   - Services offered (from Business Profile)
+   - Update frequency (last 10 posts)
+   - Notes
+
+### 2. Preparing Search Queries
+   - Compile a list of target keywords relevant to the business
+   - For each keyword, define the exact location parameters to use
+   - Schedule regular intervals for data collection (weekly/monthly)
+
+### 3. Capturing Maps Pack Data Using Firecrawl
+   For each keyword and location combination:
+   
+   ```javascript
+   // Sample code showing how to implement with Firecrawl
+   firecrawl_scrape({
+     url: "https://www.google.com/search?q=[KEYWORD]+near+[LOCATION]",
+     formats: ["markdown", "screenshot"],
+     actions: [
+       // Allow time for Maps Pack to load
+       { type: "wait", milliseconds: 3000 },
+       
+       // Take screenshot of entire page
+       { type: "screenshot", fullPage: true },
+       
+       // Target the Maps Pack section specifically
+       // The selector ".vk_c" targets the Google Maps Pack container
+       { type: "scrape", selector: "div[data-local-attribute-container]" },
+       { type: "screenshot", selector: "div[data-local-attribute-container]" },
+       
+       // Alternative selectors to try if the first one doesn't work
+       // Maps Pack listings container
+       { type: "scrape", selector: ".rlfl__tls" },
+       { type: "screenshot", selector: ".rlfl__tls" },
+       
+       // Individual Maps Pack business listings
+       { type: "scrape", selector: ".VkpGBb" },
+       { type: "screenshot", selector: ".VkpGBb" },
+       
+       // Click "More places" button if available
+       { type: "click", selector: "a.Yy0iBb" },
+       { type: "wait", milliseconds: 2000 },
+       { type: "screenshot", fullPage: true }
+     ],
+     mobile: false,
+     waitFor: 5000
+   })
+   ```
+
+### 4. Data Extraction and Recording
+   From the captured screenshots and HTML:
+   - Identify all businesses appearing in the Maps Pack
+   - Record their ranking positions
+   - Document any feature badges (e.g., "Sponsored," "Website")
+   - Note review counts and ratings
+   - Capture business categories shown
+   
+   For tracked businesses:
+   - Record position changes compared to previous captures
+   - Note any changes in displayed information
+
+### 5. Competitor Analysis
+   For businesses ranking in the Maps Pack:
+   
+   ```javascript
+   // Sample code for competitor analysis using Firecrawl
+   firecrawl_scrape({
+     url: "https://www.google.com/maps/place/[COMPETITOR_NAME]+[LOCATION]",
+     formats: ["markdown", "screenshot"],
+     actions: [
+       { type: "wait", milliseconds: 2000 },
+       { type: "screenshot", fullPage: true },
+       
+       // Capture business profile details
+       { type: "scrape", selector: ".jANrlb" },
+       
+       // Capture reviews section
+       { type: "click", selector: "button[data-tab-index='1']" },
+       { type: "wait", milliseconds: 1500 },
+       { type: "screenshot", selector: "div[data-review-id]" },
+       
+       // Capture business attributes
+       { type: "click", selector: "button[data-item-id='authority']" },
+       { type: "wait", milliseconds: 1500 },
+       { type: "screenshot", selector: ".OFi3y" }
+     ],
+     waitFor: 5000
+   })
+   ```
+
+### 6. Device and Browser Testing
+   For key queries, test across multiple environments:
+   
+   ```javascript
+   // Mobile device simulation
+   firecrawl_scrape({
+     url: "https://www.google.com/search?q=[KEYWORD]+near+[LOCATION]",
+     formats: ["markdown", "screenshot"],
+     mobile: true,
+     actions: [
+       { type: "wait", milliseconds: 3000 },
+       { type: "screenshot", fullPage: true },
+       
+       // Maps Pack elements on mobile
+       { type: "scrape", selector: ".bJzME" },
+       { type: "screenshot", selector: ".bJzME" }
+     ]
+   })
+   ```
+
+### 7. Services and Update Frequency Analysis
+   For each business identified in the Maps Pack, use the Google Business Profile direct link method to extract services and update frequency information:
+
+   ```javascript
+   // Capturing services and updates from Google Business Profile
+   firecrawl_scrape({
+     // Use the simplified g.co/kgs format for direct access to business profiles
+     url: "https://g.co/kgs/[PROFILE_ID]",
+     formats: ["markdown", "screenshot"],
+     actions: [
+       // Allow time for the profile to load
+       { type: "wait", milliseconds: 5000 },
+       
+       // Take a full screenshot to capture basic profile information
+       { type: "screenshot", fullPage: false },
+       
+       // Extract Services section - this will contain the comprehensive service list
+       { type: "scrape", selector: "div[role='tabpanel']" },
+       
+       // If looking specifically for the Updates section, click the Updates tab
+       { type: "click", selector: "button:contains('Updates')" },
+       { type: "wait", milliseconds: 1500 },
+       { type: "screenshot", selector: "div[role='tabpanel']" },
+       { type: "scrape", selector: "div[role='tabpanel']" }
+     ],
+     waitFor: 8000
+   })
+   ```
+
+   From the captured data:
+   - Document all service categories and specific services listed
+   - Record the frequency of profile updates (date pattern)
+   - Note the recency of the latest update
+   - Document the types of content being shared
+   - Analyze competitor service offerings for gaps in your own listings
+
+   Add the following columns to your tracking spreadsheet:
+   - Primary service category
+   - Number of specific services listed
+   - List of specific services
+   - Update frequency (e.g., daily, weekly, monthly)
+   - Last update date
+   - Update content types (e.g., articles, promotions, news)
+
+### 8. Comprehensive Maps Pack Analysis Workflow
+   
+   #### A. Initial Data Collection
+   1. Run a Firecrawl scrape on the primary search query (e.g., "Boston Personal Injury Lawyers")
+      ```javascript
+      firecrawl_scrape({
+        url: "https://www.google.com/search?q=[KEYWORD]+[LOCATION]",
+        formats: ["markdown", "screenshot"],
+        actions: [
+          { type: "wait", milliseconds: 3000 },
+          { type: "screenshot", fullPage: true },
+          { type: "scrape", selector: ".rlfl__tls" }
+        ],
+        waitFor: 5000
+      })
+      ```
+   2. Identify the top 3-5 businesses appearing in the Maps Pack
+   3. For each business, perform individual Firecrawl scrapes of:
+      ```javascript
+      // Scrape business website
+      firecrawl_scrape({
+        url: "[BUSINESS_WEBSITE_URL]",
+        formats: ["markdown", "screenshot"],
+        onlyMainContent: true,
+        waitFor: 5000
+      })
+      
+      // Scrape Google Business Profile
+      firecrawl_scrape({
+        url: "https://www.google.com/maps/place/[BUSINESS_NAME]+[LOCATION]",
+        formats: ["markdown", "screenshot"],
+        actions: [
+          { type: "wait", milliseconds: 3000 },
+          { type: "screenshot", fullPage: true },
+          { type: "scrape", selector: ".rogA2c" }, // Business description
+          { type: "scrape", selector: ".fontBodyMedium" } // Services and attributes
+        ],
+        waitFor: 5000
+      })
+      ```
+
+   #### B. Extended Competitor Analysis
+   1. Expand analysis beyond the Maps Pack to include the top 20 businesses for the query
+      ```javascript
+      // Click "More places" button to see the expanded list
+      firecrawl_scrape({
+        url: "https://www.google.com/search?q=[KEYWORD]+[LOCATION]",
+        formats: ["markdown", "screenshot"],
+        actions: [
+          { type: "wait", milliseconds: 3000 },
+          { type: "click", selector: "a.Yy0iBb" }, // "More places" link
+          { type: "wait", milliseconds: 2000 },
+          { type: "screenshot", fullPage: true },
+          { type: "scrape", selector: ".rllt__details" } // Business listings details
+        ],
+        waitFor: 5000
+      })
+      ```
+   2. Create a comprehensive spreadsheet with columns for:
+      - Rank position (1-20)
+      - Business name
+      - Rating (stars)
+      - Review count
+      - Years in business (if available)
+      - Primary and secondary categories
+      - URL
+      - Phone number
+      - Address
+      - Special attributes (e.g., "Online appointments", "Woman-owned", etc.)
+
+   #### C. Profile Content Analysis
+   1. For each of the top 20 businesses, collect:
+      ```javascript
+      // In-depth profile analysis
+      firecrawl_scrape({
+        url: "https://www.google.com/maps/place/[BUSINESS_NAME]+[LOCATION]",
+        formats: ["markdown", "screenshot"],
+        actions: [
+          { type: "wait", milliseconds: 3000 },
+          
+          // Capture services
+          { type: "click", selector: "button[data-item-id='services']" },
+          { type: "wait", milliseconds: 1500 },
+          { type: "screenshot", selector: ".m6QErb" },
+          { type: "scrape", selector: ".m6QErb" },
+          
+          // Capture posts
+          { type: "click", selector: "button[data-item-id='posts']" },
+          { type: "wait", milliseconds: 1500 },
+          { type: "screenshot", selector: ".DAdsTc" },
+          { type: "scrape", selector: ".DAdsTc" },
+          
+          // Capture photos
+          { type: "click", selector: "button[data-item-id='photos']" },
+          { type: "wait", milliseconds: 1500 },
+          { type: "screenshot", selector: ".PrH8EK" },
+          
+          // Capture Q&A
+          { type: "click", selector: "button[data-item-id='questions']" },
+          { type: "wait", milliseconds: 1500 },
+          { type: "screenshot", selector: ".DzVBYd" },
+          { type: "scrape", selector: ".DzVBYd" }
+        ],
+        waitFor: 5000
+      })
+      ```
+      - All services listed
+      - Posts/updates frequency (last 90 days)
+      - Types of posts (promotional, informative, etc.)
+      - Photo count and quality
+      - Hours of operation
+      - Q&A section content
+      - Types of reviews (verify if they mention specific services)
+   
+   #### D. Website-to-Profile Synchronization Analysis
+   1. Compare website content with profile content for:
+      - Consistency in services offered
+      - Messaging alignment
+      - Contact information accuracy
+      - Brand representation
+
+   #### E. Pattern Recognition and Reporting
+   1. Identify patterns in the top 20 profiles:
+      - Common services among top 5 vs. positions 15-20
+      - Review velocity (new reviews per month)
+      - Update frequency correlation with ranking
+      - Services that appear in higher-ranked profiles but not lower ones
+   2. Create visualization dashboard highlighting:
+      - Position trends over time (if historical data available)
+      - Service offering comparison across all 20 competitors
+      - Update frequency distribution
+      - Review quantity and quality correlation with ranking
+      - Key differentiators between top 5 and remaining listings
+
+### 9. Dashboard Development
+   
+   #### A. Create comprehensive tracking dashboard with:
+   1. Current rankings overview (positions 1-20)
+      ```javascript
+      // React component for rankings overview
+      const RankingsOverview = () => {
+        const competitors = [...]; // Top 20 competitors data
+        
+        return (
+          <div className="rankings-overview">
+            <h2>Maps Pack Rankings</h2>
+            <div className="rankings-grid">
+              {competitors.map((comp, index) => (
+                <div 
+                  key={index} 
+                  className={`ranking-item ${index < 3 ? 'top-ranking' : ''}`}
+                >
+                  <div className="position">{index + 1}</div>
+                  <div className="details">
+                    <h3>{comp.name}</h3>
+                    <div className="stats">
+                      <span>⭐ {comp.rating}</span>
+                      <span>({comp.reviewCount} reviews)</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      };
+      ```
+   2. Interactive competitor selector for detailed profile analysis
+   3. Service matrix showing all services offered across competitors
+   4. Review trend analysis (quantity and velocity)
+   5. Content update frequency visualization
+   6. Badges and credentials comparison
+   7. Case results/settlement amounts highlighted by competitors
+
+   #### B. Add comparison capabilities:
+   1. Side-by-side comparison of any two competitors
+      ```javascript
+      const CompetitorComparison = ({ competitor1, competitor2 }) => {
+        return (
+          <div className="comparison-container">
+            <div className="comparison-header">
+              <h2>Competitor Comparison</h2>
+            </div>
+            <div className="comparison-grid">
+              <div className="metric-column">
+                <div className="metric-header">Metric</div>
+                <div className="metric-row">Position</div>
+                <div className="metric-row">Rating</div>
+                <div className="metric-row">Reviews</div>
+                <div className="metric-row">Services</div>
+                <div className="metric-row">Update Frequency</div>
+              </div>
+              <div className="competitor-column">
+                <div className="competitor-header">{competitor1.name}</div>
+                <div className="metric-row">{competitor1.position}</div>
+                <div className="metric-row">{competitor1.rating} ⭐</div>
+                <div className="metric-row">{competitor1.reviewCount}</div>
+                <div className="metric-row">{competitor1.services.length}</div>
+                <div className="metric-row">{competitor1.updateFrequency}</div>
+              </div>
+              <div className="competitor-column">
+                <div className="competitor-header">{competitor2.name}</div>
+                <div className="metric-row">{competitor2.position}</div>
+                <div className="metric-row">{competitor2.rating} ⭐</div>
+                <div className="metric-row">{competitor2.reviewCount}</div>
+                <div className="metric-row">{competitor2.services.length}</div>
+                <div className="metric-row">{competitor2.updateFrequency}</div>
+              </div>
+            </div>
+          </div>
+        );
+      };
+      ```
+   2. Filter by specific services to see only competitors offering particular services
+   3. Highlight gaps in service offerings compared to top performers
+   4. Track position changes over time with historical data input option
+
+   #### C. Implementation recommendations section:
+   1. Service optimization suggestions based on competitive analysis
+   2. Review generation strategy based on top performers
+   3. Content update schedule recommendations
+   4. Profile completion checklist based on top 5 competitors
+   5. Specific action items prioritized by potential impact
+
+### 10. Data Analysis and Reporting
+   Compile all data into the tracking spreadsheet
+   Generate visual charts showing:
+   - Ranking trends over time
+   - Competitor visibility comparison
+   - Correlation between Maps Pack presence and business attributes
+   - Service offering comparison between competitors
+   - Update frequency patterns
+   
+   Document patterns observed:
+   - Keywords where the business consistently ranks well/poorly
+   - Impact of business profile updates on rankings
+   - Correlation between reviews and ranking position
+   - Relationship between service comprehensiveness and ranking
+
+### 11. Optimization Recommendations
+   Based on the analysis:
+   - Identify gaps in Google Business Profile compared to top-ranking competitors
+   - Note review quantity and quality differentials
+   - Document category and attribute differences
+   - Recommend specific service listings to add or modify
+   - Suggest optimal update frequency based on competitor analysis
+   - Recommend specific actions to improve ranking positions
+
+### 12. Implementation and Follow-up
+   - Implement recommended changes to the business profile
+   - Execute a follow-up analysis after 14-30 days to measure impact
+   - Document successful optimization tactics for future reference
+
+### 13. Quality Control and Ongoing Monitoring
+
+   #### A. Establish baseline measurements for:
+   1. Current rankings for target keywords
+   2. Current service offerings
+   3. Current review count and rating
+   4. Current update frequency
+
+   #### B. Implement tracking schedule:
+   1. Weekly ranking checks for primary keywords
+      ```javascript
+      // Automated weekly check script
+      firecrawl_batch_scrape({
+        options: {
+          formats: ["markdown", "screenshot"],
+          waitFor: 5000
+        },
+        urls: [
+          "https://www.google.com/search?q=[KEYWORD1]+[LOCATION]",
+          "https://www.google.com/search?q=[KEYWORD2]+[LOCATION]",
+          "https://www.google.com/search?q=[KEYWORD3]+[LOCATION]"
+        ]
+      })
+      ```
+   2. Bi-weekly full competitor analysis for top 5 competitors
+   3. Monthly comprehensive analysis of all 20 competitors
+   4. Quarterly trend analysis comparing historical data
+
+   #### C. Reporting methodology:
+   1. Create standardized reports highlighting:
+      - Ranking changes
+      - Optimization opportunities
+      - Competitive threats
+      - Performance of implemented recommendations
+   2. Use visualization dashboard to communicate insights clearly
+   3. Include specific action items with each report
+
+## Quality Control Measures
+- Use consistent search parameters (same browser, location settings, logged-out state)
+- Implement version control for screenshots and data
+- Validate data by manual spot-checking
+- Document any Google algorithm updates during the monitoring period
+- Regularly test different selectors as Google frequently updates their HTML structure
+- Cross-reference data between different scraping methods to ensure accuracy
+- Implement automated data validation checks to flag anomalies
+
+## Best Practices for Service and Update Analysis
+1. **Finding Direct Profile Links**:
+   - When viewing a business in Google Maps, click the "Share" button
+   - Select "Copy link" to get the g.co/kgs shortened URL format
+   - This format is more reliable for scraping than full Google Maps URLs
+
+2. **Service Analysis**:
+   - Look beyond the main service category to document all listed services
+   - Group services into logical categories (e.g., practice areas, specific offerings)
+   - Compare service listings across competitors to identify gaps
+   - Pay attention to the order of services (prioritized services appear first)
+   - Track service additions/removals over time for top competitors
+
+3. **Update Frequency Analysis**:
+   - Record the date pattern of the last 10 posts (e.g., daily, weekly, sporadic)
+   - Note the types of content being shared (educational, promotional, news)
+   - Calculate the average time between posts
+   - Monitor for correlation between posting frequency and ranking changes
+   - Analyze engagement with posts (likes, shares, comments if available)
+
+4. **Review Analysis**:
+   - Track review velocity (new reviews per week/month)
+   - Analyze review sentiment and specific mentions of services
+   - Monitor response rate and time to respond to reviews
+   - Compare review quality and length between top and lower-ranked businesses
+
+5. **Alternative Methods When Scraping Fails**:
+   - Manual data collection using screenshots and data entry
+   - Web search for "[Business Name] services Google Business Profile"
+   - Check third-party directories that may list services
+   - Use Google Maps mobile app for alternate view of business information
+
+## Common Google Business Profile Sections to Monitor
+1. **Overview**: General business information
+2. **Services**: Comprehensive list of service offerings
+3. **Reviews**: Customer feedback and ratings
+4. **Updates**: Recent posts and content
+5. **Photos**: Visual content uploaded by business and users
+6. **Q&A**: Questions from users and business responses
+7. **Attributes**: Special features like "Online appointments" or "Woman-owned"
+
+## CSS Selectors Reference Guide
+Due to Google's frequent updates to HTML structure, here's a current selector reference list that should be checked and updated regularly:
+
+```
+// Maps Pack container selectors
+div[data-local-attribute-container]
+.rlfl__tls
+.VkpGBb
+
+// Business listing selectors
+.rllt__details
+.rogA2c  // Business description
+.fontBodyMedium  // Services and attributes
+
+// Business profile sections
+.jANrlb  // Business details
+div[role='tabpanel']  // Service tabs
+.m6QErb  // Service listings
+.DAdsTc  // Posts section
+.PrH8EK  // Photos section
+.DzVBYd  // Q&A section
+
+// Mobile-specific selectors
+.bJzME  // Mobile Maps Pack
+
+// Navigation elements
+a.Yy0iBb  // "More places" link
+button[data-tab-index='1']  // Reviews tab
+button[data-item-id='authority']  // About tab
+button[data-item-id='services']  // Services tab
+button[data-item-id='posts']  // Updates tab
+button[data-item-id='photos']  // Photos tab
+button[data-item-id='questions']  // Q&A tab
+```
+
+Note: Google frequently updates their HTML structure and CSS classes, so selectors may need to be updated periodically. If a selector fails to capture data, try using browser developer tools to identify the updated selectors.-
