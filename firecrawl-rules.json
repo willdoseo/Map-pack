@@ -1,0 +1,409 @@
+{
+  "name": "Local SEO Dashboard - Firecrawl Rules",
+  "version": "1.0.0",
+  "description": "Extraction rules for collecting competitive intelligence data for local SEO analysis",
+  "settings": {
+    "target_location": "San Diego, CA",
+    "industry": "Personal Injury Law",
+    "primary_keywords": [
+      "Property Management"
+    ],
+    "batch_config": {
+      "max_concurrent": 5,
+      "pause_between_requests": 5000,
+      "retry_attempts": 3,
+      "max_competitors": 20
+    },
+    "timeouts": {
+      "default_wait": 3000,
+      "maps_pack_load": 5000,
+      "profile_load": 5000,
+      "website_load": 5000
+    }
+  },
+  "extraction_rules": {
+    "maps_pack": {
+      "url_pattern": "https://www.google.com/search?q={keyword}+{location}",
+      "formats": [
+        "markdown",
+        "screenshot"
+      ],
+      "actions": [
+        {
+          "type": "wait",
+          "milliseconds": 3000
+        },
+        {
+          "type": "screenshot",
+          "fullPage": true
+        },
+        {
+          "type": "scrape",
+          "selector": "div[data-local-attribute-container]"
+        },
+        {
+          "type": "screenshot",
+          "selector": "div[data-local-attribute-container]"
+        },
+        {
+          "type": "scrape",
+          "selector": ".rlfl__tls"
+        },
+        {
+          "type": "click",
+          "selector": "a.Yy0iBb"
+        },
+        {
+          "type": "wait",
+          "milliseconds": 2000
+        },
+        {
+          "type": "screenshot",
+          "fullPage": true
+        }
+      ],
+      "mobile": false,
+      "waitFor": 5000,
+      "extraction_schema": {
+        "competitors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "position": {
+                "type": "number"
+              },
+              "rating": {
+                "type": "number"
+              },
+              "reviewCount": {
+                "type": "number"
+              },
+              "address": {
+                "type": "string"
+              },
+              "phone": {
+                "type": "string"
+              },
+              "website": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "extraction_prompt": "Extract all businesses from the Google Maps Pack results. For each business, include the business name, position in the pack (1 for first listing, etc.), star rating, number of reviews, address, phone number, and website if available."
+    },
+    "business_profile": {
+      "url_pattern": "https://www.google.com/maps/place/{business_name}+{location}",
+      "formats": [
+        "markdown",
+        "screenshot"
+      ],
+      "actions": [
+        {
+          "type": "wait",
+          "milliseconds": 2000
+        },
+        {
+          "type": "screenshot",
+          "fullPage": true
+        },
+        {
+          "type": "scrape",
+          "selector": ".jANrlb"
+        },
+        {
+          "type": "click",
+          "selector": "button[data-tab-index='1']"
+        },
+        {
+          "type": "wait",
+          "milliseconds": 1500
+        },
+        {
+          "type": "screenshot",
+          "selector": "div[data-review-id]"
+        },
+        {
+          "type": "scrape",
+          "selector": "div[data-review-id]"
+        },
+        {
+          "type": "click",
+          "selector": "button[data-item-id='services']"
+        },
+        {
+          "type": "wait",
+          "milliseconds": 1500
+        },
+        {
+          "type": "screenshot",
+          "selector": ".m6QErb"
+        },
+        {
+          "type": "scrape",
+          "selector": ".m6QErb"
+        },
+        {
+          "type": "click",
+          "selector": "button[data-item-id='posts']"
+        },
+        {
+          "type": "wait",
+          "milliseconds": 1500
+        },
+        {
+          "type": "screenshot",
+          "selector": ".DAdsTc"
+        },
+        {
+          "type": "scrape",
+          "selector": ".DAdsTc"
+        },
+        {
+          "type": "click",
+          "selector": "button[data-item-id='photos']"
+        },
+        {
+          "type": "wait",
+          "milliseconds": 1500
+        },
+        {
+          "type": "screenshot",
+          "selector": "img[data-photo-index]"
+        },
+        {
+          "type": "click",
+          "selector": "button[data-item-id='questions']"
+        },
+        {
+          "type": "wait",
+          "milliseconds": 1500
+        },
+        {
+          "type": "screenshot",
+          "selector": ".DzVBYd"
+        },
+        {
+          "type": "scrape",
+          "selector": ".DzVBYd"
+        }
+      ],
+      "waitFor": 5000,
+      "extraction_schema": {
+        "businessName": {
+          "type": "string"
+        },
+        "rating": {
+          "type": "number"
+        },
+        "reviewCount": {
+          "type": "number"
+        },
+        "address": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "website": {
+          "type": "string"
+        },
+        "services": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "badges": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "attributes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "updateFrequency": {
+          "type": "string",
+          "enum": [
+            "Daily",
+            "Weekly",
+            "Bi-weekly",
+            "Monthly",
+            "Quarterly",
+            "Rarely"
+          ]
+        },
+        "lastPostDate": {
+          "type": "string"
+        },
+        "qAndACount": {
+          "type": "number"
+        },
+        "photoCount": {
+          "type": "number"
+        }
+      }
+    },
+    "competitor_website": {
+      "url_pattern": "{website_url}",
+      "formats": [
+        "markdown",
+        "screenshot"
+      ],
+      "actions": [
+        {
+          "type": "wait",
+          "milliseconds": 3000
+        },
+        {
+          "type": "scrape",
+          "selector": "div:contains('Case Results'), div:contains('Our Verdicts'), div:contains('Settlements')"
+        },
+        {
+          "type": "screenshot",
+          "selector": "div:contains('Case Results'), div:contains('Our Verdicts'), div:contains('Settlements')"
+        },
+        {
+          "type": "click",
+          "selector": "a:contains('Case Results'), a:contains('Verdicts'), a:contains('Settlements')"
+        },
+        {
+          "type": "wait",
+          "milliseconds": 2000
+        },
+        {
+          "type": "screenshot",
+          "fullPage": true
+        },
+        {
+          "type": "scrape",
+          "selector": "body"
+        }
+      ],
+      "onlyMainContent": true,
+      "waitFor": 5000,
+      "extraction_schema": {
+        "caseResults": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "amount": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "extraction_prompt": "Extract case results/verdicts/settlements from this law firm's website. For each case result, include the type of case (e.g., Car Accident, Medical Malpractice) and the settlement amount. Format as an array of objects with 'type' and 'amount' properties."
+    },
+    "mobile_testing": {
+      "url_pattern": "https://www.google.com/search?q={keyword}+{location}",
+      "formats": [
+        "markdown",
+        "screenshot"
+      ],
+      "mobile": true,
+      "actions": [
+        {
+          "type": "wait",
+          "milliseconds": 3000
+        },
+        {
+          "type": "screenshot",
+          "fullPage": true
+        },
+        {
+          "type": "scrape",
+          "selector": ".bJzME"
+        },
+        {
+          "type": "screenshot",
+          "selector": ".bJzME"
+        }
+      ],
+      "waitFor": 5000
+    }
+  },
+  "extraction_prompts": {
+    "services": "Extract all legal services offered by this law firm based on their Google Business Profile. Return a simple array of service names.",
+    "case_results": "Extract case results/verdicts/settlements from this law firm's website. For each case result, include the type of case (e.g., Car Accident, Medical Malpractice) and the settlement amount. Format as an array of objects with 'type' and 'amount' properties.",
+    "update_frequency": "Based on the Google Business Profile posts, determine how frequently this profile is updated. Categorize as one of: Daily, Weekly, Bi-weekly, Monthly, Quarterly, or Rarely.",
+    "badges": "Extract all badges and special attributes from this Google Business Profile. Badges include things like 'Veteran-owned', 'Woman-owned', etc. Return a simple array of badge names.",
+    "insights_report": "Generate a competitive insights report for personal injury lawyers in this location. Analyze the data for these competitors and identify strengths, weaknesses, and optimization opportunities. Focus on: 1) Review strategies that correlate with higher rankings, 2) Service gaps and opportunities, 3) Profile update frequencies and content strategies, 4) Settlement amounts and case type specialization."
+  },
+  "data_transformation": {
+    "dashboard_format": {
+      "id": "Generated from business name",
+      "name": "Business name",
+      "position": "Position in Maps Pack",
+      "rating": "Star rating",
+      "reviewCount": "Number of reviews",
+      "services": "Array of services offered",
+      "updateFrequency": "How often profile is updated",
+      "lastUpdate": "Date of last post",
+      "badges": "Special profile badges",
+      "attributes": "Business attributes",
+      "photos": "Number of profile photos",
+      "posts": "Number of profile posts",
+      "qAndA": "Number of Q&A entries",
+      "reviewVelocity": "Reviews per month",
+      "positionHistory": "Array of historical positions",
+      "caseResults": "Case settlement results",
+      "url": "Business website",
+      "location": "Business location",
+      "category": "Business category"
+    }
+  },
+  "analysis_workflow": {
+    "steps": [
+      {
+        "name": "collect_maps_pack",
+        "description": "Collect Maps Pack rankings for all primary keywords",
+        "rule": "maps_pack"
+      },
+      {
+        "name": "extract_competitors",
+        "description": "Extract unique competitors from Maps Pack results",
+        "depends_on": "collect_maps_pack"
+      },
+      {
+        "name": "collect_profile_data",
+        "description": "Collect detailed profile data for each competitor",
+        "rule": "business_profile",
+        "depends_on": "extract_competitors"
+      },
+      {
+        "name": "collect_website_data",
+        "description": "Collect website data for case results",
+        "rule": "competitor_website",
+        "depends_on": "collect_profile_data"
+      },
+      {
+        "name": "transform_data",
+        "description": "Process and transform data for dashboard",
+        "depends_on": [
+          "collect_profile_data",
+          "collect_website_data"
+        ]
+      },
+      {
+        "name": "save_data",
+        "description": "Save the processed data",
+        "depends_on": "transform_data"
+      }
+    ]
+  }
+}

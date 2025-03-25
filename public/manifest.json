@@ -1,6 +1,6 @@
 {
-  "short_name": "PropertyPulse",
-  "name": "PropertyPulse Management Dashboard",
+  "short_name": "SEOInsight",
+  "name": "Local SEO Competitive Insight Dashboard",
   "icons": [
     {
       "src": "favicon.ico",
@@ -20,6 +20,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#bf6e4e",
-  "background_color": "#f5f3f1"
+  "theme_color": "#2c3e50",
+  "background_color": "#f8f9fa"
 } 

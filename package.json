@@ -1,7 +1,8 @@
 {
-  "name": "property-management-dashboard",
+  "name": "local-seo-dashboard",
   "version": "0.1.0",
   "private": true,
+  "description": "Local SEO Competitive Landscape and Insight Dashboard",
   "dependencies": {
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",

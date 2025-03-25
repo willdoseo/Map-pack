@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Grid, Paper, Typography, Button, Divider, IconButton } from '@mui/material';
+import { Box, Grid, Paper, Typography, Button, Divider, IconButton, Card, CardContent, Tabs, Tab } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { 
   MoreVert as MoreVertIcon,
@@ -15,6 +15,15 @@ import UpdateFrequencyChart from './dashboard/UpdateFrequencyChart';
 import CompetitorTrends from './dashboard/CompetitorTrends';
 import SocialMediaEngagement from './dashboard/SocialMediaEngagement';
 import ClientTestimonials from './dashboard/ClientTestimonials';
+import RankingsOverview from './dashboard/RankingsOverview';
+import CompetitorComparison from './dashboard/CompetitorComparison';
+import ServiceMatrix from './dashboard/ServiceMatrix';
+import ReviewTrends from './dashboard/ReviewTrends';
+import UpdateFrequency from './dashboard/UpdateFrequency';
+import BadgesCredentials from './dashboard/BadgesCredentials';
+import CaseResults from './dashboard/CaseResults';
+import OptimizationRecommendations from './dashboard/OptimizationRecommendations';
+import { recommendationData } from '../data/sampleData';
 
 // Custom styled components
 const DashboardHeader = styled(Box)(({ theme }) => ({
@@ -55,7 +64,13 @@ const RefreshButton = styled(IconButton)(({ theme }) => ({
 }));
 
 // Main Dashboard Component
-const Dashboard = () => {
+const Dashboard = ({ competitors, services, selectedCompetitor, comparisonCompetitor }) => {
+  const [tabValue, setTabValue] = React.useState(0);
+
+  const handleTabChange = (event, newValue) => {
+    setTabValue(newValue);
+  };
+
   // Mock data for last sync time
   const lastSyncTime = new Date().toLocaleString('en-US', {
     hour: 'numeric',
@@ -64,203 +79,100 @@ const Dashboard = () => {
   });
 
   return (
-    <Box sx={{ py: 2, px: 1 }}>
-      <DashboardHeader>
-        <Box>
-          <Typography variant="h4" fontWeight={600} gutterBottom>
-            Property Management Dashboard
-          </Typography>
-          <Typography variant="body1" color="text.secondary">
-            Monitor your property rankings, competitor analysis, and market trends
-          </Typography>
+    <Box>
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
+          Local SEO Competitive Analysis
+        </Typography>
+        <Typography variant="body1" color="text.secondary">
+          Monitor Google Maps Pack rankings, competitor profiles, service offerings, and generate optimization recommendations
+        </Typography>
+      </Box>
+
+      <Paper sx={{ mb: 4, p: { xs: 2, md: 3 } }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
+          <Tabs value={tabValue} onChange={handleTabChange} aria-label="dashboard tabs">
+            <Tab label="Overview" />
+            <Tab label="Competitor Analysis" />
+            <Tab label="Recommendations" />
+          </Tabs>
         </Box>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <Typography variant="body2" color="text.secondary">
-            Last synced: {lastSyncTime}
-          </Typography>
-          <Button 
-            variant="contained" 
-            color="primary" 
-            startIcon={<RefreshIcon />}
-          >
-            Refresh Data
-          </Button>
+
+        {/* Tab 1: Overview */}
+        <Box role="tabpanel" hidden={tabValue !== 0} id="tabpanel-0">
+          {tabValue === 0 && (
+            <>
+              <RankingsOverview competitors={competitors.slice(0, 10)} />
+              
+              <Grid container spacing={4} sx={{ mt: 2 }}>
+                <Grid item xs={12} md={7}>
+                  <ReviewTrends competitors={competitors.slice(0, 5)} />
+                </Grid>
+                <Grid item xs={12} md={5}>
+                  <UpdateFrequency competitors={competitors.slice(0, 5)} />
+                </Grid>
+              </Grid>
+              
+              <Grid container spacing={4} sx={{ mt: 2 }}>
+                <Grid item xs={12} lg={7}>
+                  <ServiceMatrix 
+                    competitors={competitors.slice(0, 5)} 
+                    services={services.slice(0, 12)} 
+                  />
+                </Grid>
+                <Grid item xs={12} lg={5}>
+                  <BadgesCredentials competitors={competitors.slice(0, 5)} />
+                </Grid>
+              </Grid>
+            </>
+          )}
         </Box>
-      </DashboardHeader>
 
-      <Grid container spacing={3}>
-        {/* Property Statistics */}
-        <Grid item xs={12}>
-          <PropertyStats />
-        </Grid>
+        {/* Tab 2: Competitor Analysis */}
+        <Box role="tabpanel" hidden={tabValue !== 1} id="tabpanel-1">
+          {tabValue === 1 && (
+            <>
+              <Grid container spacing={4}>
+                <Grid item xs={12}>
+                  <CompetitorComparison 
+                    competitor1={selectedCompetitor} 
+                    competitor2={comparisonCompetitor}
+                    allCompetitors={competitors}
+                  />
+                </Grid>
+              </Grid>
+              
+              <Grid container spacing={4} sx={{ mt: 1 }}>
+                <Grid item xs={12} md={6}>
+                  <CaseResults competitors={competitors.slice(0, 5)} />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Card sx={{ height: '100%' }}>
+                    <CardContent>
+                      <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
+                        Keyword Positions
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        Select a competitor to view keyword ranking data
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              </Grid>
+            </>
+          )}
+        </Box>
 
-        {/* Maps Pack Rankings Chart */}
-        <Grid item xs={12} md={8}>
-          <DashboardCard className="dashboard-card fade-in">
-            <CardHeader>
-              <Typography variant="h6" fontWeight={600}>
-                Google Maps Pack Rankings
-              </Typography>
-              <Box>
-                <RefreshButton size="small">
-                  <RefreshIcon fontSize="small" />
-                </RefreshButton>
-                <IconButton size="small">
-                  <MoreVertIcon fontSize="small" />
-                </IconButton>
-              </Box>
-            </CardHeader>
-            <Divider sx={{ mb: 2 }} />
-            <Box sx={{ height: 350, flex: 1 }}>
-              <PropertyRankingsChart />
-            </Box>
-          </DashboardCard>
-        </Grid>
-
-        {/* Competitor Analysis */}
-        <Grid item xs={12} md={4}>
-          <DashboardCard className="dashboard-card fade-in">
-            <CardHeader>
-              <Typography variant="h6" fontWeight={600}>
-                Competitor Analysis
-              </Typography>
-              <IconButton size="small">
-                <MoreVertIcon fontSize="small" />
-              </IconButton>
-            </CardHeader>
-            <Divider sx={{ mb: 2 }} />
-            <Box sx={{ height: 350, flex: 1 }}>
-              <CompetitorAnalysisChart />
-            </Box>
-          </DashboardCard>
-        </Grid>
-
-        {/* Maps Pack Positions Analysis */}
-        <Grid item xs={12} md={6}>
-          <DashboardCard className="dashboard-card fade-in">
-            <CardHeader>
-              <Typography variant="h6" fontWeight={600}>
-                Maps Pack Positions Analysis
-              </Typography>
-              <IconButton size="small">
-                <MoreVertIcon fontSize="small" />
-              </IconButton>
-            </CardHeader>
-            <Divider sx={{ mb: 2 }} />
-            <Box sx={{ height: 300, flex: 1 }}>
-              <MapPackPositionsChart />
-            </Box>
-          </DashboardCard>
-        </Grid>
-
-        {/* Service Offerings Comparison */}
-        <Grid item xs={12} md={6}>
-          <DashboardCard className="dashboard-card fade-in">
-            <CardHeader>
-              <Typography variant="h6" fontWeight={600}>
-                Service Offerings Comparison
-              </Typography>
-              <IconButton size="small">
-                <MoreVertIcon fontSize="small" />
-              </IconButton>
-            </CardHeader>
-            <Divider sx={{ mb: 2 }} />
-            <Box sx={{ height: 300, overflowY: 'auto', flex: 1 }}>
-              <ServiceOfferingsTable />
-            </Box>
-          </DashboardCard>
-        </Grid>
-
-        {/* Social Media Engagement */}
-        <Grid item xs={12} md={8}>
-          <DashboardCard className="dashboard-card fade-in">
-            <CardHeader>
-              <Typography variant="h6" fontWeight={600}>
-                Social Media Engagement
-              </Typography>
-              <IconButton size="small">
-                <MoreVertIcon fontSize="small" />
-              </IconButton>
-            </CardHeader>
-            <Divider sx={{ mb: 2 }} />
-            <Box sx={{ height: 350, flex: 1 }}>
-              <SocialMediaEngagement />
-            </Box>
-          </DashboardCard>
-        </Grid>
-
-        {/* Client Testimonials */}
-        <Grid item xs={12} md={4}>
-          <DashboardCard className="dashboard-card fade-in">
-            <CardHeader>
-              <Typography variant="h6" fontWeight={600}>
-                Client Testimonials
-              </Typography>
-              <IconButton size="small">
-                <MoreVertIcon fontSize="small" />
-              </IconButton>
-            </CardHeader>
-            <Divider sx={{ mb: 2 }} />
-            <Box sx={{ height: 350, flex: 1 }}>
-              <ClientTestimonials />
-            </Box>
-          </DashboardCard>
-        </Grid>
-
-        {/* Reviews Over Time */}
-        <Grid item xs={12} md={4}>
-          <DashboardCard className="dashboard-card fade-in">
-            <CardHeader>
-              <Typography variant="h6" fontWeight={600}>
-                Reviews Over Time
-              </Typography>
-              <IconButton size="small">
-                <MoreVertIcon fontSize="small" />
-              </IconButton>
-            </CardHeader>
-            <Divider sx={{ mb: 2 }} />
-            <Box sx={{ height: 300, flex: 1 }}>
-              <ReviewsOverTimeChart />
-            </Box>
-          </DashboardCard>
-        </Grid>
-
-        {/* Update Frequency */}
-        <Grid item xs={12} md={4}>
-          <DashboardCard className="dashboard-card fade-in">
-            <CardHeader>
-              <Typography variant="h6" fontWeight={600}>
-                Profile Update Frequency
-              </Typography>
-              <IconButton size="small">
-                <MoreVertIcon fontSize="small" />
-              </IconButton>
-            </CardHeader>
-            <Divider sx={{ mb: 2 }} />
-            <Box sx={{ height: 300, flex: 1 }}>
-              <UpdateFrequencyChart />
-            </Box>
-          </DashboardCard>
-        </Grid>
-
-        {/* Competitor Trends */}
-        <Grid item xs={12} md={4}>
-          <DashboardCard className="dashboard-card fade-in">
-            <CardHeader>
-              <Typography variant="h6" fontWeight={600}>
-                Competitor Trends
-              </Typography>
-              <IconButton size="small">
-                <MoreVertIcon fontSize="small" />
-              </IconButton>
-            </CardHeader>
-            <Divider sx={{ mb: 2 }} />
-            <Box sx={{ height: 300, flex: 1 }}>
-              <CompetitorTrends />
-            </Box>
-          </DashboardCard>
-        </Grid>
-      </Grid>
+        {/* Tab 3: Recommendations */}
+        <Box role="tabpanel" hidden={tabValue !== 2} id="tabpanel-2">
+          {tabValue === 2 && (
+            <OptimizationRecommendations 
+              recommendations={recommendationData} 
+              topCompetitors={competitors.slice(0, 3)}
+            />
+          )}
+        </Box>
+      </Paper>
     </Box>
   );
 };

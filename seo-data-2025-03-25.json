@@ -1,0 +1,212 @@
+[
+  {
+    "id": "sunrisepropertymanagement1660",
+    "name": "Sunrise Property Management",
+    "position": 1,
+    "rating": 4.9,
+    "reviewCount": 143,
+    "services": [
+      "Residential Property Management",
+      "Commercial Property Management",
+      "Tenant Screening",
+      "Rent Collection",
+      "Property Maintenance",
+      "Leasing Services",
+      "Eviction Services"
+    ],
+    "updateFrequency": {},
+    "lastUpdate": "2025-03-25",
+    "badges": [
+      "BBB Accredited",
+      "NARPM Member",
+      "24/7 Emergency Service"
+    ],
+    "attributes": [],
+    "photos": 0,
+    "posts": 0,
+    "qAndA": 0,
+    "reviewVelocity": 12,
+    "positionHistory": [
+      2,
+      2,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "caseResults": {},
+    "url": "https://sunrisepropertymgmt.com",
+    "location": "San Diego, CA",
+    "category": "Property Management"
+  },
+  {
+    "id": "sandiegopropertymanagementrealestate1660",
+    "name": "San Diego Property Management & Real Estate",
+    "position": 2,
+    "rating": 4.7,
+    "reviewCount": 182,
+    "services": [
+      "Residential Property Management",
+      "Commercial Property Management",
+      "Tenant Screening",
+      "Rent Collection",
+      "Property Maintenance",
+      "Leasing Services",
+      "Eviction Services"
+    ],
+    "updateFrequency": {},
+    "lastUpdate": "2025-03-25",
+    "badges": [
+      "BBB Accredited",
+      "NARPM Member",
+      "24/7 Emergency Service"
+    ],
+    "attributes": [],
+    "photos": 0,
+    "posts": 0,
+    "qAndA": 0,
+    "reviewVelocity": 15,
+    "positionHistory": [
+      4,
+      3,
+      2,
+      2,
+      1,
+      1,
+      2,
+      2
+    ],
+    "caseResults": {},
+    "url": "https://sandiegopropertymanagement.com",
+    "location": "San Diego, CA",
+    "category": "Property Management"
+  },
+  {
+    "id": "harlandpropertymanagement1660",
+    "name": "Harland Property Management",
+    "position": 3,
+    "rating": 4.8,
+    "reviewCount": 97,
+    "services": [
+      "Residential Property Management",
+      "Commercial Property Management",
+      "Tenant Screening",
+      "Rent Collection",
+      "Property Maintenance",
+      "Leasing Services",
+      "Eviction Services"
+    ],
+    "updateFrequency": {},
+    "lastUpdate": "2025-03-25",
+    "badges": [
+      "BBB Accredited",
+      "NARPM Member",
+      "24/7 Emergency Service"
+    ],
+    "attributes": [],
+    "photos": 0,
+    "posts": 0,
+    "qAndA": 0,
+    "reviewVelocity": 8,
+    "positionHistory": [
+      6,
+      6,
+      6,
+      6,
+      5,
+      4,
+      4,
+      3
+    ],
+    "caseResults": {},
+    "url": "https://harlandpropertymanagement.com",
+    "location": "San Diego, CA",
+    "category": "Property Management"
+  },
+  {
+    "id": "bayequitypropertymanagement1660",
+    "name": "Bay Equity Property Management",
+    "position": 4,
+    "rating": 4.6,
+    "reviewCount": 114,
+    "services": [
+      "Residential Property Management",
+      "Commercial Property Management",
+      "Tenant Screening",
+      "Rent Collection",
+      "Property Maintenance",
+      "Leasing Services",
+      "Eviction Services"
+    ],
+    "updateFrequency": {},
+    "lastUpdate": "2025-03-25",
+    "badges": [
+      "BBB Accredited",
+      "NARPM Member",
+      "24/7 Emergency Service"
+    ],
+    "attributes": [],
+    "photos": 0,
+    "posts": 0,
+    "qAndA": 0,
+    "reviewVelocity": 10,
+    "positionHistory": [
+      4,
+      4,
+      4,
+      5,
+      5,
+      5,
+      5,
+      4
+    ],
+    "caseResults": {},
+    "url": "https://bayequitypropertymanagement.com",
+    "location": "San Diego, CA",
+    "category": "Property Management"
+  },
+  {
+    "id": "homeownersmanagemententerprisehome1660",
+    "name": "Home Owners Management Enterprise (HOME)",
+    "position": 5,
+    "rating": 4.5,
+    "reviewCount": 89,
+    "services": [
+      "Residential Property Management",
+      "Commercial Property Management",
+      "Tenant Screening",
+      "Rent Collection",
+      "Property Maintenance",
+      "Leasing Services",
+      "Eviction Services"
+    ],
+    "updateFrequency": {},
+    "lastUpdate": "2025-03-25",
+    "badges": [
+      "BBB Accredited",
+      "NARPM Member",
+      "24/7 Emergency Service"
+    ],
+    "attributes": [],
+    "photos": 0,
+    "posts": 0,
+    "qAndA": 0,
+    "reviewVelocity": 7,
+    "positionHistory": [
+      4,
+      5,
+      6,
+      5,
+      5,
+      5,
+      5,
+      5
+    ],
+    "caseResults": {},
+    "url": "https://home-pm.com",
+    "location": "San Diego, CA",
+    "category": "Property Management"
+  }
+]

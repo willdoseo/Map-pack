@@ -7,172 +7,220 @@ import {
   ListItemButton, 
   ListItemIcon, 
   ListItemText,
-  Divider,
   Typography,
-  Avatar,
-  styled
+  Divider,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Button
 } from '@mui/material';
-import {
-  Dashboard as DashboardIcon,
-  BarChart as AnalyticsIcon,
-  Home as PropertyIcon,
-  People as TenantsIcon,
-  Build as MaintenanceIcon,
-  AttachMoney as FinanceIcon,
-  Settings as SettingsIcon,
-  Help as HelpIcon,
-  ExitToApp as LogoutIcon
+import { 
+  BarChart as BarChartIcon,
+  TrendingUp as TrendingUpIcon,
+  CompareArrows as CompareArrowsIcon,
+  Stars as StarsIcon,
+  CheckCircleOutline as CheckCircleOutlineIcon,
+  LocalOffer as LocalOfferIcon,
+  Timeline as TimelineIcon,
+  SsidChart as SsidChartIcon
 } from '@mui/icons-material';
 
-// Custom styled components
-const SidebarContainer = styled(Drawer)(({ theme }) => ({
-  width: 280,
-  flexShrink: 0,
-  '& .MuiDrawer-paper': {
-    width: 280,
-    boxSizing: 'border-box',
-    backgroundColor: '#ffffff',
-    borderRight: 'none',
-    boxShadow: '0px 0px 15px rgba(0, 0, 0, 0.05)',
-  },
-}));
+const drawerWidth = 280;
 
-const LogoContainer = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  padding: theme.spacing(3),
-}));
+const Sidebar = ({ 
+  competitors, 
+  selectedCompetitor, 
+  setSelectedCompetitor, 
+  comparisonCompetitor, 
+  setComparisonCompetitor 
+}) => {
+  const handleCompetitorChange = (event) => {
+    const selectedId = parseInt(event.target.value);
+    const competitor = competitors.find(comp => comp.id === selectedId) || null;
+    setSelectedCompetitor(competitor);
+  };
 
-const Logo = styled('img')({
-  height: 48,
-  marginRight: 12,
-});
+  const handleComparisonChange = (event) => {
+    const selectedId = parseInt(event.target.value);
+    const competitor = competitors.find(comp => comp.id === selectedId) || null;
+    setComparisonCompetitor(competitor);
+  };
 
-const UserSection = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  padding: theme.spacing(2, 3),
-  marginBottom: theme.spacing(2),
-}));
+  const clearComparison = () => {
+    setComparisonCompetitor(null);
+  };
 
-const UserInfo = styled(Box)({
-  marginLeft: 12,
-});
-
-const NavItem = styled(ListItemButton)(({ theme, active }) => ({
-  borderRadius: 8,
-  marginBottom: 4,
-  marginLeft: 8,
-  marginRight: 8,
-  backgroundColor: active ? theme.palette.primary.light + '20' : 'transparent',
-  color: active ? theme.palette.primary.main : theme.palette.text.primary,
-  '&:hover': {
-    backgroundColor: theme.palette.primary.light + '10',
-  },
-  '& .MuiListItemIcon-root': {
-    color: active ? theme.palette.primary.main : theme.palette.text.secondary,
-  },
-}));
-
-// Menu items data
-const mainMenuItems = [
-  { text: 'Dashboard', icon: <DashboardIcon />, active: true },
-  { text: 'Analytics', icon: <AnalyticsIcon /> },
-  { text: 'Properties', icon: <PropertyIcon /> },
-  { text: 'Tenants', icon: <TenantsIcon /> },
-  { text: 'Maintenance', icon: <MaintenanceIcon /> },
-  { text: 'Finance', icon: <FinanceIcon /> },
-];
-
-const secondaryMenuItems = [
-  { text: 'Settings', icon: <SettingsIcon /> },
-  { text: 'Help & Support', icon: <HelpIcon /> },
-  { text: 'Logout', icon: <LogoutIcon /> },
-];
-
-const Sidebar = () => {
   return (
-    <SidebarContainer variant="permanent">
-      <LogoContainer>
-        <Logo src="/logo.png" alt="PropertyPulse" />
-        <Typography variant="h5" fontWeight={600} color="primary">
-          PropertyPulse
+    <Drawer
+      sx={{
+        width: drawerWidth,
+        flexShrink: 0,
+        '& .MuiDrawer-paper': {
+          width: drawerWidth,
+          boxSizing: 'border-box',
+          backgroundColor: '#2c3e50',
+          color: 'white',
+        },
+      }}
+      variant="permanent"
+      anchor="left"
+    >
+      <Box sx={{ p: 3 }}>
+        <Typography variant="h5" sx={{ fontWeight: 700 }}>
+          Local SEO Dashboard
         </Typography>
-      </LogoContainer>
-      
-      <UserSection>
-        <Avatar 
-          sx={{ 
-            width: 48, 
-            height: 48, 
-            bgcolor: '#3b4979' 
-          }}
-        >
-          WF
-        </Avatar>
-        <UserInfo>
-          <Typography variant="subtitle1" fontWeight={600}>
-            Will Furcolo
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Property Manager
-          </Typography>
-        </UserInfo>
-      </UserSection>
-      
-      <Divider sx={{ mx: 2, mb: 2 }} />
-      
-      <Box mb={2}>
-        <Typography 
-          variant="overline" 
-          color="text.secondary"
-          sx={{ px: 3, py: 1, display: 'block' }}
-        >
-          Main Menu
+        <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+          Competitive Landscape Analysis
         </Typography>
-        <List>
-          {mainMenuItems.map((item) => (
-            <ListItem key={item.text} disablePadding>
-              <NavItem active={item.active}>
-                <ListItemIcon>
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText 
-                  primary={item.text} 
-                  primaryTypographyProps={{ 
-                    fontWeight: item.active ? 600 : 400 
-                  }} 
-                />
-              </NavItem>
-            </ListItem>
-          ))}
-        </List>
       </Box>
       
-      <Divider sx={{ mx: 2, mb: 2 }} />
-      
-      <Box>
-        <Typography 
-          variant="overline" 
-          color="text.secondary"
-          sx={{ px: 3, py: 1, display: 'block' }}
-        >
-          Other
+      <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.1)' }} />
+
+      <Box sx={{ px: 3, py: 2 }}>
+        <Typography variant="body2" sx={{ mb: 1, color: 'rgba(255, 255, 255, 0.7)' }}>
+          Select Competitor
         </Typography>
-        <List>
-          {secondaryMenuItems.map((item) => (
-            <ListItem key={item.text} disablePadding>
-              <NavItem>
-                <ListItemIcon>
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText primary={item.text} />
-              </NavItem>
-            </ListItem>
-          ))}
-        </List>
+        <FormControl fullWidth size="small" sx={{ mb: 2, backgroundColor: 'rgba(255, 255, 255, 0.05)', borderRadius: 1 }}>
+          <Select
+            value={selectedCompetitor ? selectedCompetitor.id : ''}
+            onChange={handleCompetitorChange}
+            displayEmpty
+            sx={{ 
+              color: 'white',
+              '.MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.1)' },
+              '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.3)' },
+              '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.5)' },
+              '.MuiSvgIcon-root': { color: 'rgba(255, 255, 255, 0.7)' }
+            }}
+          >
+            <MenuItem value="" disabled>
+              <em>Select a competitor</em>
+            </MenuItem>
+            {competitors.map((competitor) => (
+              <MenuItem key={competitor.id} value={competitor.id}>
+                {competitor.position}. {competitor.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        <Typography variant="body2" sx={{ mb: 1, color: 'rgba(255, 255, 255, 0.7)' }}>
+          Compare With
+        </Typography>
+        <FormControl fullWidth size="small" sx={{ mb: 1, backgroundColor: 'rgba(255, 255, 255, 0.05)', borderRadius: 1 }}>
+          <Select
+            value={comparisonCompetitor ? comparisonCompetitor.id : ''}
+            onChange={handleComparisonChange}
+            displayEmpty
+            sx={{ 
+              color: 'white',
+              '.MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.1)' },
+              '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.3)' },
+              '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255, 255, 255, 0.5)' },
+              '.MuiSvgIcon-root': { color: 'rgba(255, 255, 255, 0.7)' }
+            }}
+          >
+            <MenuItem value="" disabled>
+              <em>Select for comparison</em>
+            </MenuItem>
+            {competitors.filter(comp => !selectedCompetitor || comp.id !== selectedCompetitor.id).map((competitor) => (
+              <MenuItem key={competitor.id} value={competitor.id}>
+                {competitor.position}. {competitor.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        
+        {comparisonCompetitor && (
+          <Button 
+            variant="text" 
+            size="small" 
+            onClick={clearComparison}
+            sx={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '0.75rem', textTransform: 'none', mb: 2 }}
+          >
+            Clear comparison
+          </Button>
+        )}
       </Box>
-    </SidebarContainer>
+
+      <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.1)' }} />
+      
+      <List sx={{ px: 1 }}>
+        <ListItem disablePadding>
+          <ListItemButton sx={{ borderRadius: 1 }}>
+            <ListItemIcon sx={{ minWidth: 40, color: 'white' }}>
+              <BarChartIcon />
+            </ListItemIcon>
+            <ListItemText primary="Rankings Overview" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton sx={{ borderRadius: 1 }}>
+            <ListItemIcon sx={{ minWidth: 40, color: 'white' }}>
+              <CompareArrowsIcon />
+            </ListItemIcon>
+            <ListItemText primary="Competitor Comparison" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton sx={{ borderRadius: 1 }}>
+            <ListItemIcon sx={{ minWidth: 40, color: 'white' }}>
+              <LocalOfferIcon />
+            </ListItemIcon>
+            <ListItemText primary="Service Matrix" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton sx={{ borderRadius: 1 }}>
+            <ListItemIcon sx={{ minWidth: 40, color: 'white' }}>
+              <StarsIcon />
+            </ListItemIcon>
+            <ListItemText primary="Review Analysis" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton sx={{ borderRadius: 1 }}>
+            <ListItemIcon sx={{ minWidth: 40, color: 'white' }}>
+              <TimelineIcon />
+            </ListItemIcon>
+            <ListItemText primary="Update Frequency" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton sx={{ borderRadius: 1 }}>
+            <ListItemIcon sx={{ minWidth: 40, color: 'white' }}>
+              <CheckCircleOutlineIcon />
+            </ListItemIcon>
+            <ListItemText primary="Badges & Credentials" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton sx={{ borderRadius: 1 }}>
+            <ListItemIcon sx={{ minWidth: 40, color: 'white' }}>
+              <TrendingUpIcon />
+            </ListItemIcon>
+            <ListItemText primary="Keyword Positions" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton sx={{ borderRadius: 1 }}>
+            <ListItemIcon sx={{ minWidth: 40, color: 'white' }}>
+              <SsidChartIcon />
+            </ListItemIcon>
+            <ListItemText primary="Optimization Recommendations" />
+          </ListItemButton>
+        </ListItem>
+      </List>
+      
+      <Box sx={{ flexGrow: 1 }} />
+      
+      <Box sx={{ p: 3 }}>
+        <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '0.75rem' }}>
+          Data last updated: March 15, 2023
+        </Typography>
+      </Box>
+    </Drawer>
   );
 };
 
